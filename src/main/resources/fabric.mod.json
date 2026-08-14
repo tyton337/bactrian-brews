@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "tameable_camels",
+	"version": "${version}",
+	"name": "Tameable Camels",
+	"description": "This mod adds camel variants that are all tameable and rideable.",
+	"authors": [
+		"Tyton337"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/tameable_camels/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.tyton.tameable_camels.TameableCamels"
+		],
+		"client": [
+			"com.tyton.tameable_camels.TameableCamelsClient"
+		],
+		"fabric-datagen": [
+			"com.tyton.tameable_camels.TameableCamelsDataGenerator"
+		]
+	},
+	"mixins": [
+		"tameable_camels.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
