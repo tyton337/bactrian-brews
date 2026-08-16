@@ -28,7 +28,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	
+
 }
 
 processResources {
@@ -77,5 +77,13 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += ['src/main/generated/resources']
+		}
 	}
 }

@@ -1,0 +1,30 @@
+{
+  "parent": "tameable_camels:root",
+  "criteria": {
+    "bred_color_camel": {
+      "conditions": {},
+      "trigger": "tameable_camels:bred_color_camel"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.tameable_camels.bred_beige_black.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:name_tag"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.tameable_camels.bred_beige_black.title"
+    }
+  },
+  "requirements": [
+    [
+      "bred_color_camel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

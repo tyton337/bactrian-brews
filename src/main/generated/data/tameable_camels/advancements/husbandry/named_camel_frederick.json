@@ -1,0 +1,30 @@
+{
+  "parent": "tameable_camels:root",
+  "criteria": {
+    "named_frederick": {
+      "conditions": {},
+      "trigger": "tameable_camels:named_camel_frederick"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.tameable_camels.named_camel_frederick.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:name_tag"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.tameable_camels.named_camel_frederick.title"
+    }
+  },
+  "requirements": [
+    [
+      "named_frederick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
