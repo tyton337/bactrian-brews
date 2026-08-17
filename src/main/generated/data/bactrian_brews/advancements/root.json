@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "bred_camel": {
+      "conditions": {},
+      "trigger": "bactrian_brews:bred_color_camel"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "bactrian_brews:textures/gui/advancements/backgrounds/bactrian_brews.png",
+    "description": {
+      "translate": "advancements.bactrian_brews.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bactrian_brews:icon_root"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bactrian_brews.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "bred_camel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

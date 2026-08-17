@@ -1,0 +1,32 @@
+{
+  "parent": "bactrian_brews:root",
+  "criteria": {
+    "bred_color_camel": {
+      "conditions": {
+        "color": "e49e69"
+      },
+      "trigger": "bactrian_brews:bred_color_camel"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bactrian_brews.masala_chai.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bactrian_brews:icon_masala_chai"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bactrian_brews.masala_chai.title"
+    }
+  },
+  "requirements": [
+    [
+      "bred_color_camel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

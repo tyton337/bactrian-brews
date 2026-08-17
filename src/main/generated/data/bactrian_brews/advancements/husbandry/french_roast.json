@@ -1,0 +1,32 @@
+{
+  "parent": "bactrian_brews:root",
+  "criteria": {
+    "bred_color_camel": {
+      "conditions": {
+        "color": "77493c"
+      },
+      "trigger": "bactrian_brews:bred_color_camel"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bactrian_brews.french_roast.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bactrian_brews:icon_french_roast"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bactrian_brews.french_roast.title"
+    }
+  },
+  "requirements": [
+    [
+      "bred_color_camel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

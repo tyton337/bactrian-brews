@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "bactrian_brews:item/icon_darjeeling"
+  }
+}

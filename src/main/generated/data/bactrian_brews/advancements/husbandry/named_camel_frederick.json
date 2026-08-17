@@ -1,0 +1,30 @@
+{
+  "parent": "bactrian_brews:root",
+  "criteria": {
+    "named_frederick": {
+      "conditions": {},
+      "trigger": "bactrian_brews:named_camel_frederick"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bactrian_brews.named_camel_frederick.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:name_tag"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bactrian_brews.named_camel_frederick.title"
+    }
+  },
+  "requirements": [
+    [
+      "named_frederick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "bactrian_brews:root",
+  "criteria": {
+    "bred_color_camel": {
+      "conditions": {
+        "color": "fddfad"
+      },
+      "trigger": "bactrian_brews:bred_color_camel"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bactrian_brews.matcha_latte.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bactrian_brews:icon_matcha_latte"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bactrian_brews.matcha_latte.title"
+    }
+  },
+  "requirements": [
+    [
+      "bred_color_camel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

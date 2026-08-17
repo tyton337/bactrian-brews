@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "com.tyton.bactrian_brews.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"NameTagItemMixin",
+		"CamelEntityMixin",
+		"CamelEntityRendererMixin",
+		"CamelEntityModelMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
