@@ -84,12 +84,12 @@ public abstract class CamelEntityModelMixin<T extends CamelEntity> extends Singl
 
     matrices.push();
     body.rotate(matrices);
-    ModelPart saddle = body.getChild("saddle");
+    ModelPart saddle = this.saddleAndBridle[0];
     if (saddle.visible) saddle.render(matrices, vertices, light, overlay, 1.0F, 1.0F, 1.0F, alpha);
 
     head.rotate(matrices);
-    ModelPart bridle = head.getChild("bridle");
-    ModelPart reinsPart = head.getChild("reins");
+    ModelPart bridle = this.saddleAndBridle[1];
+    ModelPart reinsPart = this.reins[0];
     if (bridle.visible) bridle.render(matrices, vertices, light, overlay, 1.0F, 1.0F, 1.0F, alpha);
     if (reinsPart.visible) reinsPart.render(matrices, vertices, light, overlay, 1.0F, 1.0F, 1.0F, alpha);
     matrices.pop();

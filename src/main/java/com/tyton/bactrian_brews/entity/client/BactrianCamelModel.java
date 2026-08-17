@@ -109,7 +109,7 @@ public class BactrianCamelModel<T extends BactrianCamelEntity> extends SinglePar
 		if (this.child) {
 			matrices.push();
 			matrices.scale(BABY_SCALE, BABY_SCALE, BABY_SCALE);
-			matrices.translate(0.0, 1.5, 0.0);
+			matrices.translate(0.0, (1.0 / BABY_SCALE - 1.0) * 1.5, 0.0);
 			this.getPart().render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
 			matrices.pop();
 		} else {

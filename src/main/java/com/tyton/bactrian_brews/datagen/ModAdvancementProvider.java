@@ -4,11 +4,13 @@ import com.tyton.bactrian_brews.advancement.custom.BredColorCamelCriterion;
 import com.tyton.bactrian_brews.advancement.custom.ColorAdvancement;
 import com.tyton.bactrian_brews.advancement.custom.NamedCamelFrederickCriterion;
 import com.tyton.bactrian_brews.item.ModItems;
+import com.tyton.bactrian_brews.util.CamelColorUtil;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.AdvancementFrame;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.LootContextPredicate;
@@ -16,8 +18,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
-
-import static com.tyton.bactrian_brews.util.CamelColorUtil.COLOR_ADVANCEMENTS;
 
 public class ModAdvancementProvider extends FabricAdvancementProvider {
 
@@ -64,25 +64,29 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
         .criterion("named_frederick", frederickCriterion)
         .build(consumer, "bactrian_brews:husbandry/named_camel_frederick");
 
-    for (ColorAdvancement colorAdv : COLOR_ADVANCEMENTS) {
+    for (ColorAdvancement colorAdv : CamelColorUtil.COLOR_ADVANCEMENTS) {
       BredColorCamelCriterion.Conditions conditions =
           new BredColorCamelCriterion.Conditions(LootContextPredicate.EMPTY, colorAdv.targetColor());
       AdvancementCriterion criterion = new AdvancementCriterion(conditions);
-
-      Advancement.Builder.create()
-          .parent(tabRoot)
-          .display(
-              new ItemStack(ModItems.COLOR_ICONS.get(colorAdv.id())),
-              Text.translatable("advancements.bactrian_brews." + colorAdv.id() + ".title"),
-              Text.translatable("advancements.bactrian_brews." + colorAdv.id() + ".description"),
-              null,
-              AdvancementFrame.TASK,
-              true,
-              true,
-              false
-          )
-          .criterion("bred_color_camel", criterion)
-          .build(consumer, "bactrian_brews:husbandry/" + colorAdv.id());
+      Item icon = ModItems.COLOR_ICONS.get(colorAdv.id());
+      if (icon == null) {
+        throw new IllegalStateException("No icon registered for color advancement: " + colorAdv.id());
+      } else {
+        Advancement.Builder.create()
+            .parent(tabRoot)
+            .display(
+                new ItemStack(icon),
+                Text.translatable("advancements.bactrian_brews." + colorAdv.id() + ".title"),
+                Text.translatable("advancements.bactrian_brews." + colorAdv.id() + ".description"),
+                null,
+                AdvancementFrame.TASK,
+                true,
+                true,
+                false
+            )
+            .criterion("bred_color_camel", criterion)
+            .build(consumer, "bactrian_brews:husbandry/" + colorAdv.id());
+      }
     }
   }
 }
