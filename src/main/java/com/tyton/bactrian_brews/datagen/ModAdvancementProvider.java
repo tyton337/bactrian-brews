@@ -59,7 +59,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
             AdvancementFrame.TASK,
             true,
             true,
-            true
+            false
         )
         .criterion("named_frederick", frederickCriterion)
         .build(consumer, "bactrian_brews:husbandry/named_camel_frederick");
