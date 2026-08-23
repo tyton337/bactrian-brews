@@ -47,6 +47,7 @@ public class ModItems {
   }
 
   public static void register() {
+    BactrianBrews.LOGGER.info("Registering ModItems for " + BactrianBrews.MOD_ID);
     ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(ModItems::addItemsToSpawnEggItemGroup);
   }
 }

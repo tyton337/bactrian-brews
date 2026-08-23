@@ -12,8 +12,10 @@ public class BactrianCamelModel<T extends BactrianCamelEntity> extends SinglePar
 	private final ModelPart body;
 	private final ModelPart head;
 	private static final float BABY_SCALE = 0.5F;
+	private float tintRed = 1.0F;
+	private float tintGreen = 1.0F;
+	private float tintBlue = 1.0F;
 
-	// Limb trackers for standard continuous leg animations
 	private final ModelPart rightFrontLeg;
 	private final ModelPart leftFrontLeg;
 	private final ModelPart rightHindLeg;
@@ -102,6 +104,11 @@ public class BactrianCamelModel<T extends BactrianCamelEntity> extends SinglePar
 		this.leftFrontLeg.pitch += MathHelper.lerp(sitProgress, 0.0F, -1.2F);
 		this.rightHindLeg.pitch += MathHelper.lerp(sitProgress, 0.0F, 1.2F);
 		this.leftHindLeg.pitch += MathHelper.lerp(sitProgress, 0.0F, 1.2F);
+
+		int color = entity.getSkinColor();
+		this.tintRed = ((color >> 16) & 0xFF) / 255.0F;
+		this.tintGreen = ((color >> 8) & 0xFF) / 255.0F;
+		this.tintBlue = (color & 0xFF) / 255.0F;
 	}
 
 	@Override
@@ -109,11 +116,11 @@ public class BactrianCamelModel<T extends BactrianCamelEntity> extends SinglePar
 		if (this.child) {
 			matrices.push();
 			matrices.scale(BABY_SCALE, BABY_SCALE, BABY_SCALE);
-			matrices.translate(0.0, (1.0 / BABY_SCALE - 1.0) * 1.5, 0.0);
-			this.getPart().render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+			matrices.translate(0.0, 1.5, 0.0);
+			this.getPart().render(matrices, vertexConsumer, light, overlay, this.tintRed, this.tintGreen, this.tintBlue, alpha);
 			matrices.pop();
 		} else {
-			this.getPart().render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+			this.getPart().render(matrices, vertexConsumer, light, overlay, this.tintRed, this.tintGreen, this.tintBlue, alpha);
 		}
 	}
 }

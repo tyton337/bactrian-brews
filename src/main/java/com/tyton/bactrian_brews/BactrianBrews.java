@@ -5,6 +5,7 @@ import com.tyton.bactrian_brews.entity.ModEntities;
 import com.tyton.bactrian_brews.entity.ModEntitySpawns;
 import com.tyton.bactrian_brews.entity.custom.BactrianCamelEntity;
 import com.tyton.bactrian_brews.item.ModItems;
+import com.tyton.bactrian_brews.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -23,5 +24,6 @@ public class BactrianBrews implements ModInitializer {
 		ModCriteria.register();
 		ModItems.register();
 		ModEntitySpawns.register();
+		ModScreenHandlers.register();
 	}
 }

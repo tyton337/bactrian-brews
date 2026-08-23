@@ -9,4 +9,6 @@ public class ModModelLayers {
       new EntityModelLayer(new Identifier(BactrianBrews.MOD_ID, "bactrian_camel"), "main");
   public static final EntityModelLayer BACTRIAN_CAMEL_SADDLE =
       new EntityModelLayer(new Identifier(BactrianBrews.MOD_ID, "bactrian_camel_saddle"), "main");
+  public static final EntityModelLayer BACTRIAN_CAMEL_CHEST =
+      new EntityModelLayer(new Identifier(BactrianBrews.MOD_ID, "bactrian_camel_chest"), "main");
 }

@@ -30,7 +30,7 @@ public abstract class CamelEntityMixin extends AnimalEntity implements CamelColo
 
   @Inject(method = "initDataTracker", at = @At("TAIL"))
   private void bactrian_brews$initSkinColor(CallbackInfo ci) {
-    this.dataTracker.startTracking(bactrian_brews$SKIN_COLOR, -1); // -1 = no custom color, render vanilla
+    this.dataTracker.startTracking(bactrian_brews$SKIN_COLOR, -1);
   }
 
   @Override
@@ -48,8 +48,6 @@ public abstract class CamelEntityMixin extends AnimalEntity implements CamelColo
     return this.dataTracker.get(bactrian_brews$SKIN_COLOR) != -1;
   }
 
-  // Without this, a vanilla camel never enters "love mode" from cactus, so our
-  // AnimalMateGoal (which only runs on the Bactrian side) would never find it as a candidate.
   @Inject(method = "isBreedingItem", at = @At("HEAD"), cancellable = true)
   private void bactrian_brews$allowCactusBreeding(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
     if (stack.isOf(Items.CACTUS)) {

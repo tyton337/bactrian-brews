@@ -2,9 +2,9 @@ package com.tyton.bactrian_brews.entity.custom;
 
 import com.tyton.bactrian_brews.advancement.ModCriteria;
 import com.tyton.bactrian_brews.entity.ModEntities;
+import com.tyton.bactrian_brews.screen.custom.BactrianCamelScreenHandler;
 import com.tyton.bactrian_brews.util.CamelColorAccessor;
 import com.tyton.bactrian_brews.util.CamelColorUtil;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -17,14 +17,16 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CamelEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.StackReference;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -42,13 +44,13 @@ public class BactrianCamelEntity extends CamelEntity {
       DataTracker.registerData(BactrianCamelEntity.class, TrackedDataHandlerRegistry.INTEGER);
   private static final TrackedData<Boolean> HAS_CHEST =
       DataTracker.registerData(BactrianCamelEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+  private static final TrackedData<String> DYE_COLOR =
+      DataTracker.registerData(BactrianCamelEntity.class, TrackedDataHandlerRegistry.STRING);
   private static final TrackedData<Boolean> FREDERICK_COLOR_ROLLED =
       DataTracker.registerData(BactrianCamelEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-  protected SimpleInventory items;
 
   public BactrianCamelEntity(EntityType<? extends CamelEntity> entityType, World world) {
     super(entityType, world);
-    this.setupInventory();
   }
 
   @Override
@@ -56,6 +58,7 @@ public class BactrianCamelEntity extends CamelEntity {
     super.initDataTracker();
     this.dataTracker.startTracking(SKIN_COLOR, CamelColorUtil.CHAMOMILE);
     this.dataTracker.startTracking(HAS_CHEST, false);
+    this.dataTracker.startTracking(DYE_COLOR, "");
     this.dataTracker.startTracking(FREDERICK_COLOR_ROLLED, false);
   }
 
@@ -79,7 +82,6 @@ public class BactrianCamelEntity extends CamelEntity {
     this.goalSelector.add(2, new AnimalMateGoal(this, 1.0, CamelEntity.class));
   }
 
-
   @Override
   public boolean canBreedWith(AnimalEntity other) {
     if (other == this) return false;
@@ -92,10 +94,6 @@ public class BactrianCamelEntity extends CamelEntity {
     return this.getPassengerList().isEmpty();
   }
 
-  private void setupInventory() {
-    this.items = new SimpleInventory(15);
-  }
-
   public boolean hasChest() {
     return this.dataTracker.get(HAS_CHEST);
   }
@@ -104,9 +102,64 @@ public class BactrianCamelEntity extends CamelEntity {
     this.dataTracker.set(HAS_CHEST, hasChest);
   }
 
+  public String getDye() {
+    return this.dataTracker.get(DYE_COLOR);
+  }
+
+  public void setDye(String dye) {
+    this.dataTracker.set(DYE_COLOR, dye);
+  }
+
+  @Override
+  public boolean isTame() {
+    return true;
+  }
+
+  @Override
+  protected int getInventorySize() {
+    return this.hasChest() ? 29 : super.getInventorySize();
+  }
+
+  @Override
+  public boolean hasArmorSlot() {
+    return false;
+  }
+
+  @Override
+  public boolean isHorseArmor(ItemStack stack) {
+    return false;
+  }
+
   @Override
   public boolean isBreedingItem(ItemStack stack) {
     return stack.isOf(Items.CACTUS);
+  }
+
+  @Override
+  public StackReference getStackReference(int mappedIndex) {
+    return super.getStackReference(mappedIndex);
+  }
+
+  @Override
+  public void openInventory(PlayerEntity player) {
+    if (!this.getWorld().isClient() && (!this.hasPassengers() || this.hasPassenger(player))) {
+      player.openHandledScreen(new net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory() {
+        @Override
+        public void writeScreenOpeningData(ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+          buf.writeVarInt(BactrianCamelEntity.this.getId());
+        }
+
+        @Override
+        public Text getDisplayName() {
+          return BactrianCamelEntity.this.getDisplayName();
+        }
+
+        @Override
+        public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+          return new BactrianCamelScreenHandler(syncId, playerInventory, BactrianCamelEntity.this.items, BactrianCamelEntity.this);
+        }
+      });
+    }
   }
 
   @Override
@@ -129,17 +182,14 @@ public class BactrianCamelEntity extends CamelEntity {
       }
       return ActionResult.success(this.getWorld().isClient());
     }
-    if (player.isSneaking() && this.hasChest()) {
+    if (player.isSneaking()) {
       if (!this.getWorld().isClient()) {
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-            (syncId, playerInventory, playerEntity) ->
-                GenericContainerScreenHandler.createGeneric9x2(syncId, playerInventory),
-            this.getDisplayName()
-        ));
+        this.openInventory(player);
       }
       return ActionResult.success(this.getWorld().isClient());
     }
-    return super.interactMob(player, hand);
+
+      return super.interactMob(player, hand);
   }
 
   @Override
@@ -166,33 +216,14 @@ public class BactrianCamelEntity extends CamelEntity {
   }
 
   @Override
-  protected void dropInventory() {
-    super.dropInventory();
-    if (this.items != null) {
-      for (int i = 0; i < this.items.size(); ++i) {
-        ItemStack itemStack = this.items.getStack(i);
-        if (!itemStack.isEmpty()) {
-          this.dropStack(itemStack);
-        }
-      }
-    }
-    if (this.hasChest()) {
-      if (!this.getWorld().isClient()) {
-        this.dropItem(Blocks.CHEST);
-      }
-      this.setHasChest(false);
-    }
-  }
-
-  @Override
   public void writeCustomDataToNbt(NbtCompound nbt) {
     super.writeCustomDataToNbt(nbt);
     nbt.putInt("SkinColor", this.getSkinColor());
     nbt.putBoolean("HasChest", this.hasChest());
     nbt.putBoolean("FrederickColorRolled", this.dataTracker.get(FREDERICK_COLOR_ROLLED));
-    if (this.items != null) {
+    if (this.hasChest()) {
       NbtList nbtList = new NbtList();
-      for (int i = 0; i < this.items.size(); ++i) {
+      for (int i = 2; i < this.items.size(); ++i) {
         ItemStack itemStack = this.items.getStack(i);
         if (itemStack.isEmpty()) continue;
         NbtCompound nbtCompound = new NbtCompound();
@@ -202,6 +233,10 @@ public class BactrianCamelEntity extends CamelEntity {
       }
       nbt.put("ChestItems", nbtList);
     }
+    ItemStack dyeStack = this.items.getStack(1);
+    if (!dyeStack.isEmpty()) {
+      nbt.put("DyeItem", dyeStack.writeNbt(new NbtCompound()));
+    }
   }
 
   @Override
@@ -209,22 +244,31 @@ public class BactrianCamelEntity extends CamelEntity {
     super.readCustomDataFromNbt(nbt);
     if (nbt.getType("SkinColor") == NbtElement.STRING_TYPE) {
       String colorName = nbt.getString("SkinColor");
-      int convertedHex = com.tyton.bactrian_brews.util.CamelColorUtil.getColorFromName(colorName);
+      int convertedHex = CamelColorUtil.getColorFromName(colorName);
       this.setSkinColor(convertedHex);
     } else {
       this.setSkinColor(nbt.getInt("SkinColor"));
     }
     this.dataTracker.set(FREDERICK_COLOR_ROLLED, nbt.getBoolean("FrederickColorRolled"));
     this.setHasChest(nbt.getBoolean("HasChest"));
-    if (nbt.contains("ChestItems", 9)) {
+    if (this.hasChest() && nbt.contains("ChestItems", 9)) {
       NbtList nbtList = nbt.getList("ChestItems", 10);
-      this.setupInventory();
       for (int i = 0; i < nbtList.size(); ++i) {
         NbtCompound nbtCompound = nbtList.getCompound(i);
         int j = nbtCompound.getByte("Slot") & 255;
-        if (j >= this.items.size()) continue;
-        this.items.setStack(j, ItemStack.fromNbt(nbtCompound));
+        if (j >= 2 && j < this.items.size()) {
+          this.items.setStack(j, ItemStack.fromNbt(nbtCompound));
+        }
       }
+    }
+    if (nbt.contains("DyeItem", 10)) {
+      ItemStack dyeStack = ItemStack.fromNbt(nbt.getCompound("DyeItem"));
+      this.items.setStack(1, dyeStack);
+      if (dyeStack.getItem() instanceof DyeItem dyeItem) {
+        this.setDye(dyeItem.getColor().getName());
+      }
+    } else {
+      this.setDye("");
     }
   }
 
@@ -248,7 +292,7 @@ public class BactrianCamelEntity extends CamelEntity {
         CamelColorAccessor partnerAccessor = (CamelColorAccessor) partnerCamel;
         int partnerColor = partnerAccessor.bactrian_brews$hasCustomColor()
             ? partnerAccessor.bactrian_brews$getSkinColor()
-            : CamelColorUtil.CHAMOMILE; // baseline for a pure vanilla parent
+            : CamelColorUtil.CHAMOMILE;
 
         int blendedColor = CamelColorUtil.blendParentColors(thisColor, partnerColor);
         ((CamelColorAccessor) baby).bactrian_brews$setSkinColor(blendedColor);
@@ -346,6 +390,18 @@ public class BactrianCamelEntity extends CamelEntity {
       }
     } else {
       this.dataTracker.set(FREDERICK_COLOR_ROLLED, false);
+    }
+  }
+
+  public Inventory getItems() {
+    return this.items;
+  }
+
+  @Override
+  public void onTrackedDataSet(TrackedData<?> data) {
+    super.onTrackedDataSet(data);
+    if (HAS_CHEST.equals(data)) {
+      this.onChestedStatusChanged();
     }
   }
 }

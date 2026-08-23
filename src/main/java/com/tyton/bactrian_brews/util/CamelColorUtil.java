@@ -16,8 +16,6 @@ public class CamelColorUtil {
 
   private static final int[] NATURAL_SPAWNS = {WHITE_MOCHA, CHAMOMILE, PUMPKIN_SPICE, TURKISH_COFFEE, HOJICHA};
 
-  // Single source of truth: which two base colors each blend name comes from.
-  // COLOR_ADVANCEMENTS and the name->hex lookup are both derived from this.
   private record BlendPair(String id, int colorA, int colorB) {}
 
   private static final BlendPair[] BLEND_PAIRS = new BlendPair[] {

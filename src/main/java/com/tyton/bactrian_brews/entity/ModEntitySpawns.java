@@ -1,5 +1,6 @@
 package com.tyton.bactrian_brews.entity;
 
+import com.tyton.bactrian_brews.BactrianBrews;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.entity.SpawnGroup;
@@ -13,6 +14,7 @@ public class ModEntitySpawns {
   }
 
   public static void register() {
+    BactrianBrews.LOGGER.info("Registering ModEntitySpawns for " + BactrianBrews.MOD_ID);
     addSpawns();
   }
 }

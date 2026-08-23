@@ -24,5 +24,8 @@
   "advancements.bactrian_brews.named_camel_frederick.title": "Frederick",
   "advancements.bactrian_brews.named_camel_frederick.description": "Obtain a random colored Bactrian camel by naming it Frederick",
   "entity.bactrian_brews.bactrian_camel": "Bactrian Camel",
-  "item.bactrian_brews.bactrian_camel_spawn_egg": "Bactrian Camel Spawn Egg"
+  "item.bactrian_brews.bactrian_camel_spawn_egg": "Bactrian Camel Spawn Egg",
+  "gui.bactrian_brews.slot.saddle": "Saddle Slot",
+  "gui.bactrian_brews.slot.chest": "Chest Slot",
+  "gui.bactrian_brews.slot.dye": "Dye Slot"
 }

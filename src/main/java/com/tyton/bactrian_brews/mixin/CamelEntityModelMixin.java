@@ -40,7 +40,7 @@ public abstract class CamelEntityModelMixin<T extends CamelEntity> extends Singl
   @Inject(method = "render", at = @At("HEAD"), cancellable = true)
   private void bactrian_brews$splitBodyAndEquipment(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, CallbackInfo ci) {
     if (this.bactrian_brews$color == -1) {
-      return; // no custom color: let vanilla's own render() run untouched
+      return;
     }
     ci.cancel();
 
@@ -63,12 +63,10 @@ public abstract class CamelEntityModelMixin<T extends CamelEntity> extends Singl
       matrices.translate(0.0F, 1.834375F, 0.0F);
     }
 
-    // Pass 1: body only, tinted (equipment hidden)
     for (ModelPart part : saddleAndBridle) part.visible = false;
     for (ModelPart part : reins) part.visible = false;
     this.root.render(matrices, vertices, light, overlay, tintRed, tintGreen, tintBlue, alpha);
 
-    // Pass 2: equipment only, true colors (restore visibility, render each directly)
     for (int idx = 0; idx < saddleAndBridle.length; idx++) saddleAndBridle[idx].visible = savedSaddleBridle[idx];
     for (int idx = 0; idx < reins.length; idx++) reins[idx].visible = savedReins[idx];
 
